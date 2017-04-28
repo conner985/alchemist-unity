@@ -1,30 +1,48 @@
 package nodes;
 
 import java.io.Serializable;
-
+/***
+ * TODO.
+ */
+@SuppressWarnings("serial")
 public class NodePosition2D implements Serializable {
 
-	private float posx,posy;
-	
-	public float getPosx() {
-		return posx;
-	}
+    private double posx, posz;
 
-	public void setPosx(float posx) {
-		this.posx = posx;
-	}
+    /***
+     * @param posx TODO
+     * @param posz TODO
+     */
+    public NodePosition2D(final double posx, final double posz) {
+        this.posx = posx;
+        this.posz = posz;
+    }
 
-	public float getPosy() {
-		return posy;
-	}
+    /***
+     * @return TODO
+     */
+    public double getPosx() {
+        return posx;
+    }
 
-	public void setPosy(float posy) {
-		this.posy = posy;
-	}
+    /***
+     * @param posx TODO
+     */
+    public void setPosx(final double posx) {
+        this.posx = posx;
+    }
+    /***
+     * @return TODO
+     */
+    public double getPosz() {
+        return posz;
+    }
 
-	public NodePosition2D(float posx, float posy) {
-		this.posx = posx;
-		this.posy = posy;
-	}
-	
+    /***
+     * @param posz TODO
+     */
+    public void setPosz(final double posz) {
+        this.posz = posz;
+    }
+
 }

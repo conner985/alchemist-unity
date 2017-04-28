@@ -3,20 +3,33 @@ package nodes;
 import java.util.ArrayList;
 import java.util.List;
 
-public class NodesDescriptor {
+/***
+ * TODO.
+ * @param <T>
+ */
+public class NodesDescriptor<T extends UnityGenericNode> {
 
-	private final List<SingleNode> nodes;
-	
-	public NodesDescriptor() {
-		nodes = new ArrayList<SingleNode>();
-	}
-	
-	public void addNode(SingleNode node){
-		nodes.add(node);
-	}
-	
-	public List<SingleNode> getNodesList(){
-		return nodes;
-	}
-	
+    private final List<T> nodes = new ArrayList<>();
+
+    /***
+     * @param node TODO
+     */
+    public void addNode(final T node) {
+        nodes.add(node);
+    }
+
+    /***
+     * @return TODO
+     */
+    public List<T> getNodesList() {
+        return nodes;
+    }
+
+    /***
+     * TODO.
+     */
+    public void clear() {
+        nodes.clear();
+    }
+
 }
