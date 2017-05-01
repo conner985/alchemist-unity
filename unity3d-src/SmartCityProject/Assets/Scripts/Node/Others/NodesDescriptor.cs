@@ -36,7 +36,7 @@ public class NodesDescriptor<T> where T : ISimNode
 
     public IDictionary<int, T> ToDictionary()
     {
-        SerializableDictionary<int, T> dict = new SerializableDictionary<int, T>();
+        Dictionary<int, T> dict = new Dictionary<int, T>();
         foreach (T simNode in nodes)
         {
             dict.Add(simNode.GetID(), simNode);

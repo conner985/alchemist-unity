@@ -1,5 +1,3 @@
-using System.Collections.Generic;
-
 public interface ISimNode
 {
     NodePosition2D GetPosition();
@@ -7,6 +5,8 @@ public interface ISimNode
 
     int GetID();
 
-    MoleculesMap GetMolecules();
-    void AddMolecule(string mol, bool conc);
+    GradientMoleculesMap GetMolecules();
+    void SetMolecules(GradientMoleculesMap molecules);
+
+    void SetMolecule(string mol, object conc);
 }

@@ -6,7 +6,7 @@ public class ExitBehaviour : AbstractBehaviourNode
     [SerializeField]
     private bool isSource = true;
 
-    private GenericNode node;
+    private GradientNode node;
 
     public void ReceiveInfo(object info)
     {
@@ -16,13 +16,13 @@ public class ExitBehaviour : AbstractBehaviourNode
     {
         if (simNodeType.Equals(SimNodeTypes.type.GRADIENT))
         {
-            node = new GenericNode(id, new NodePosition2D(transform.position.x, transform.position.z));
-            node.AddMolecule("source", isSource);
-            node.AddMolecule("enabled", enabled);
+            node = new GradientNode(id, new NodePosition2D(transform.position.x, transform.position.z), this);
+            node.SetMolecule("source", isSource);
+            node.SetMolecule("enabled", enabled);
         }
     }
 
-    public override GenericNode GetNode()
+    public override GradientNode GetNode()
     {
         node.SetPosition(new NodePosition2D(transform.position.x, transform.position.z));
         return node;

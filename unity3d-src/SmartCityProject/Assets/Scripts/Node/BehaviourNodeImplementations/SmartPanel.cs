@@ -4,6 +4,10 @@ using System.Collections.Generic;
 
 public class SmartPanel : AbstractBehaviourNode, ISmartPanel
 {
+    [SerializeField]
+    private double gradient = 0.0f;
+    [SerializeField]
+    private string closestPanel = "";
 
     [SerializeField]
     private float commRadius = 6f;
@@ -12,9 +16,10 @@ public class SmartPanel : AbstractBehaviourNode, ISmartPanel
 
     private System.Random rnd;
 
+    [SerializeField]
     private bool isEnabled;
 
-    private GenericNode node;
+    private GradientNode node;
     
     private bool systemAlarm;
 
@@ -35,6 +40,7 @@ public class SmartPanel : AbstractBehaviourNode, ISmartPanel
 
     private void RecalculateNbrHood()
     {
+        nbrHood.Clear();
         Collider[] colliders = Physics.OverlapSphere(transform.position, commRadius);
         foreach (Collider collider in colliders)
         {
@@ -46,21 +52,23 @@ public class SmartPanel : AbstractBehaviourNode, ISmartPanel
 	void Update ()
     {
 
-        if (rnd.NextDouble() > 0.4f) return;
-        if (rnd.NextDouble() < 0.1f) RecalculateNbrHood();
+        //if (rnd.NextDouble() > 1f) return;
+        RecalculateNbrHood();
 
-        GenericNode myGradientNode = node as GenericNode;
+        gradient = (double)node.GetMolecules().GetMoleculeConcentration("data");
+        
         foreach (AbstractBehaviourNode nbr in nbrHood)
         {
             ISimNode simNode = nbr.GetNode();
-            if (simNode.GetType().Equals(typeof(GenericNode)))
+            if (simNode.GetType().Equals(typeof(GradientNode)))
             {
-                GenericNode gradientNode = simNode as GenericNode;
-                if (Convert.ToDouble(gradientNode.GetMolecules().GetConcentration("data")) < Convert.ToDouble(myGradientNode.GetMolecules().GetConcentration("data")))
+                GradientNode nbrGradientNode = simNode as GradientNode;
+                if ( (double) nbrGradientNode.GetMolecules().GetMoleculeConcentration("data") < (double) node.GetMolecules().GetMoleculeConcentration("data"))
                 {
                     if (systemAlarm && transform.GetComponentInChildren<DisplayScript>())
                     {
-                        transform.GetComponentInChildren<DisplayScript>().RenderArrow(GetComponent<Collider>().transform.position);
+                        ClearDisplay();
+                        transform.GetComponentInChildren<DisplayScript>().RenderArrow(nbrGradientNode.GetGameObject().transform.position);
                     }
                 }
             }
@@ -71,7 +79,7 @@ public class SmartPanel : AbstractBehaviourNode, ISmartPanel
     public void SwitchAlarm()
     {
         isEnabled = !isEnabled;
-        node.AddMolecule("enabled", isEnabled);
+        node.SetMolecule("enabled", isEnabled);
 
     }
 
@@ -103,7 +111,7 @@ public class SmartPanel : AbstractBehaviourNode, ISmartPanel
 
     #region NODE
 
-    public override GenericNode GetNode()
+    public override GradientNode GetNode()
     {
         node.SetPosition(new NodePosition2D(transform.position.x, transform.position.z));
         return node;
@@ -113,9 +121,9 @@ public class SmartPanel : AbstractBehaviourNode, ISmartPanel
     {
         if (type.Equals(SimNodeTypes.type.GRADIENT))
         {
-            node = new GenericNode(id, new NodePosition2D(transform.position.x, transform.position.z));
-            node.AddMolecule("source", isSource);
-            node.AddMolecule("enabled", enabled);
+            node = new GradientNode(id, new NodePosition2D(transform.position.x, transform.position.z), this);
+            node.SetMolecule("source", isSource);
+            node.SetMolecule("enabled", enabled);
         }
     }
 

@@ -15,7 +15,7 @@ public class GradientNodesCollector : MonoBehaviour {
     private Stopwatch stopWatchGET;
     private Stopwatch stopWatchPOST;
 
-    private NodesDescriptor<GenericNode> nd;
+    private NodesDescriptor<GradientNode> nd;
     private IList<AbstractBehaviourNode> behaviourNodes;
 
     private System.Random rnd;
@@ -37,7 +37,7 @@ public class GradientNodesCollector : MonoBehaviour {
         stopWatchPOST.Reset(); 
 
         com.RequestPOSTNodes_Sync("http://localhost:8080/", behaviourNodes.Count, "","GRADIENT");
-        nd = com.RequestGET_Sync<GenericNode>("http://localhost:8080/");
+        nd = com.RequestGET_Sync<GradientNode>("http://localhost:8080/");
         CreateAllNodes();
 
         // start the simulation
@@ -55,7 +55,7 @@ public class GradientNodesCollector : MonoBehaviour {
             SendNodes();
         }
 
-        if (stopWatchGET.Elapsed.TotalMilliseconds > get2postTime)
+        else if (stopWatchGET.Elapsed.TotalMilliseconds > get2postTime)
         {
             stopWatchGET.Reset();
             ReceiveNodes();
@@ -84,8 +84,6 @@ public class GradientNodesCollector : MonoBehaviour {
 
     private void SendNodes()
     {
-        UnityEngine.Debug.Log("keys 0: " + nd.GetNodes()[0].GetMolecules().GetConcentration("enabled"));
-
         com.RequestPOSTNodes_Async("http://localhost:8080/ ", nd, "");
         com.responseArrivedPOST += ResponseArrivedPOST;
     }
@@ -99,22 +97,24 @@ public class GradientNodesCollector : MonoBehaviour {
 
     private void ResponseArrivedGET(string response)
     {
-
+        com.responseArrivedGET -= ResponseArrivedGET;
         UnityEngine.Debug.Log("GET ASYNC: " + response);
 
-        NodesDescriptor<GenericNode> newND = NodesDescriptor<GenericNode>.CreateNodesDescriptorFromJsonString(response);
+        NodesDescriptor<GradientNode> newND = NodesDescriptor<GradientNode>.CreateNodesDescriptorFromJsonString(response);
         UpdateAllNodes(newND);
         stopWatchPOST.Start();
     }
 
     private void ResponseArrivedPOST(string response)
     {
+        com.responseArrivedPOST -= ResponseArrivedPOST;
         stopWatchGET.Start();
     }
 
     private void CollectAllNodes()
     {
-        if (rnd.NextDouble() < 0.1f) behaviourNodes = FindObjectsOfType(typeof(AbstractBehaviourNode)) as IList<AbstractBehaviourNode>;
+        //if (rnd.NextDouble() < 0.1f)
+        behaviourNodes = FindObjectsOfType(typeof(AbstractBehaviourNode)) as IList<AbstractBehaviourNode>;
 
         nd.ClearNodes();
         nd.SetType("step");
@@ -124,17 +124,19 @@ public class GradientNodesCollector : MonoBehaviour {
         }
     }
 
-    private void UpdateAllNodes(NodesDescriptor<GenericNode> newND)
+    private void UpdateAllNodes(NodesDescriptor<GradientNode> newND)
     {
         CollectAllNodes();
-        IDictionary<int, GenericNode> newDict = newND.ToDictionary();
-        foreach (GenericNode oldSimNode in nd.GetNodes())
+        IDictionary<int, GradientNode> newDict = newND.ToDictionary();
+        int i = 0;
+        for(i = 0; i < nd.GetNodes().Count; i++)
         {
-            GenericNode newSimNode;
-            if (newDict.TryGetValue(oldSimNode.GetID(), out newSimNode))
+            GradientNode newSimNode;
+            var node = nd.GetNodes()[i];
+            if (newDict.TryGetValue(node.GetID(), out newSimNode))
             {
                 var molecules = newSimNode.GetMolecules();
-                oldSimNode.SetMolecules(molecules);
+                node.SetMolecules(molecules);
             }
         }
 

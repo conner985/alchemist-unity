@@ -96,12 +96,12 @@ public class Person : MonoBehaviour
             if (behaviourNode != null)
             {
                 ISimNode simNode = behaviourNode.GetNode();
-                if (simNode.GetType().Equals(typeof(GenericNode)))
+                if (simNode.GetType().Equals(typeof(GradientNode)))
                 {
-                    GenericNode gradientNode = simNode as GenericNode;
-                    if (Convert.ToDouble(gradientNode.GetMolecules().GetConcentration("data")) < gradient)
+                    GradientNode gradientNode = simNode as GradientNode;
+                    if (Convert.ToDouble(gradientNode.GetMolecules().GetMoleculeConcentration("data")) < gradient)
                     {
-                        gradient = Convert.ToDouble(gradientNode.GetMolecules().GetConcentration("data"));
+                        gradient = Convert.ToDouble(gradientNode.GetMolecules().GetMoleculeConcentration("data"));
                         Vector3 destination = collider.transform.position;
                         agent.SetDestination(new Vector3(destination.x, transform.position.y, destination.z));
                     }

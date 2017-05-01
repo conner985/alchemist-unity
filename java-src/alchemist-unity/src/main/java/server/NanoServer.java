@@ -28,7 +28,8 @@ import it.unibo.alchemist.model.interfaces.Reaction;
 import it.unibo.alchemist.model.interfaces.Time;
 import nodes.InitComm;
 import nodes.NodesDescriptor;
-import nodes.UnityGenericNode;
+import nodes.GradientNode;
+import nodes.IMoleculesMap;
 
 /***
  * TODO.
@@ -42,7 +43,7 @@ public class NanoServer extends NanoHTTPD {
     private static final Gson GSON_OBJ = new Gson();
     private static final int PORT_NUM = 8080;
     private static final double GRADIENT_MAXVALUE = 1000000;
-    private final NodesDescriptor<UnityGenericNode> nodes = new NodesDescriptor<UnityGenericNode>();
+    private final NodesDescriptor<GradientNode> nodes = new NodesDescriptor<GradientNode>();
     private final Semaphore mutex = new Semaphore(1);
 
     private ProgType progType;
@@ -135,15 +136,14 @@ public class NanoServer extends NanoHTTPD {
     }
 
     private void step(final JsonObject jsonObj) {
-        Type listType = new TypeToken<NodesDescriptor<UnityGenericNode>>() { }.getType();
-        final NodesDescriptor<UnityGenericNode> nodes = GSON_OBJ.fromJson(jsonObj, listType);
+        Type listType = new TypeToken<NodesDescriptor<GradientNode>>() { }.getType();
+        final NodesDescriptor<GradientNode> nodes = GSON_OBJ.fromJson(jsonObj, listType);
         sim.schedule(() -> {
-            for (final UnityGenericNode gNode : nodes.getNodesList()) {
+            for (final GradientNode gNode : nodes.getNodesList()) {
                 final Node<Object> node = env.getNodeByID(gNode.getID());
-                HashMap<String, Object> molecules = gNode.getMolecules();
-                for (Map.Entry<String, Object> entry : molecules.entrySet()) {
-                    node.setConcentration(new SimpleMolecule(entry.getKey()), entry.getValue());
-                }
+                IMoleculesMap molecules = gNode.getMolecules();
+                node.setConcentration(new SimpleMolecule("source"), (boolean) molecules.getMoleculeConcentration("source"));
+                node.setConcentration(new SimpleMolecule("enabled"), (boolean) molecules.getMoleculeConcentration("enabled"));
                 env.moveNodeToPosition(node, env.makePosition(gNode.getPosition().getPosx(), gNode.getPosition().getPosz()));
             }
         });
@@ -177,8 +177,8 @@ public class NanoServer extends NanoHTTPD {
                             } else { 
                                 val = ((Number) conc).doubleValue();
                             }
-                            UnityGenericNode unityNode = new UnityGenericNode(n.getId());
-                            unityNode.addMolecule(DATAMOL, "" + val);
+                            GradientNode unityNode = new GradientNode(n.getId());
+                            unityNode.setMolecule(DATAMOL, val);
                             nodes.addNode(unityNode);
 
                         } else {
@@ -246,8 +246,8 @@ public class NanoServer extends NanoHTTPD {
                             } else { 
                                 val = ((Number) conc).doubleValue();
                             }
-                            UnityGenericNode unityNode = new UnityGenericNode(n.getId());
-                            unityNode.addMolecule(DATAMOL, val);
+                            GradientNode unityNode = new GradientNode(n.getId());
+                            unityNode.setMolecule(DATAMOL, val);
                             nodes.addNode(unityNode);
 
                         } else {

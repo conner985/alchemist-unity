@@ -1,41 +1,32 @@
 package nodes;
 
-import java.io.Serializable;
-
 /***
  * TODO.
  */
-@SuppressWarnings("serial")
-public class GradientNode implements Serializable {
+public class GradientNode {
 
     private static final NodePosition2D DEF_POS = new NodePosition2D(0, 0);
+
     private final int id;
-    private double data;
-    private boolean source;
-    private boolean enabled;
     private final NodePosition2D position;
+    private final GradientMoleculesMap molecules;
+
 
     /***
      * @param id TODO
-     * @param data TODO
+     * @param position TODO
      */
-    public GradientNode(final int id, final double data) {
-        this(id, data, false, true, DEF_POS);
+    public GradientNode(final int id, final NodePosition2D position) {
+        this.id = id;
+        this.position = position;
+        molecules = new GradientMoleculesMap();
     }
 
     /***
      * @param id TODO
-     * @param data TODO
-     * @param source TODO
-     * @param enabled TODO
-     * @param position TODO
      */
-    public GradientNode(final int id, final double data, final boolean source, final boolean enabled, final NodePosition2D position) {
-        this.id = id;
-        this.data = data;
-        this.position = position; 
-        this.source = source;
-        this.enabled = enabled;
+    public GradientNode(final int id) {
+        this(id, DEF_POS);
     }
 
     /***
@@ -63,22 +54,15 @@ public class GradientNode implements Serializable {
     /***
      * @return TODO
      */
-    public double getData() {
-        return data;
+    public IMoleculesMap getMolecules() {
+        return molecules;
     }
 
     /***
-     * @return TODO
+     * @param mol TODO
+     * @param conc TODO
      */
-    public boolean isSource() {
-        return source;
+    public void setMolecule(final String mol, final Object conc) {
+        molecules.setMolecule(mol, conc);
     }
-
-    /***
-     * @return TODO
-     */
-    public boolean isEnabled() {
-        return enabled;
-    }
-
 }

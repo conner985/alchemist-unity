@@ -91,17 +91,17 @@
     <Compile Include="Assets\Scripts\Node\Others\GradientNodesCollector.cs" />
     <Compile Include="Assets\Scripts\Node\Others\NodePosition2D.cs" />
     <Compile Include="Assets\Scripts\Node\Others\NodesDescriptor.cs" />
-    <Compile Include="Assets\Scripts\Node\SimNodeImplementations\GenericNode.cs" />
-    <Compile Include="Assets\Scripts\Others\MoleculesMap.cs" />
+    <Compile Include="Assets\Scripts\Node\SimNodeImplementations\GradientNode.cs" />
+    <Compile Include="Assets\Scripts\Others\GradientMoleculesMap.cs" />
     <Compile Include="Assets\Scripts\Node\SimNodeImplementations\SimNodeTypes.cs" />
     <Compile Include="Assets\Scripts\Node\SimNodeInterfaces\ISimNode.cs" />
     <Compile Include="Assets\Scripts\Others\ClickDebug.cs" />
     <Compile Include="Assets\Scripts\Others\FireScript.cs" />
+    <Compile Include="Assets\Scripts\Others\IMoleculesMap.cs" />
     <Compile Include="Assets\Scripts\Others\OrbitCamera.cs" />
     <Compile Include="Assets\Scripts\Others\PanelParent.cs" />
     <Compile Include="Assets\Scripts\Others\Person.cs" />
     <Compile Include="Assets\Scripts\Others\PersonCreator.cs" />
-    <Compile Include="Assets\Scripts\Others\SerializableDictionary.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\External\PinwheelFantasyEffectFreePack1\README 1.txt" />

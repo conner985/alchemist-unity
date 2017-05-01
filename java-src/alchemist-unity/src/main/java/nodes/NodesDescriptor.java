@@ -7,7 +7,7 @@ import java.util.List;
  * TODO.
  * @param <T>
  */
-public class NodesDescriptor<T extends UnityGenericNode> {
+public class NodesDescriptor<T extends GradientNode> {
 
     private final List<T> nodes = new ArrayList<>();
 
