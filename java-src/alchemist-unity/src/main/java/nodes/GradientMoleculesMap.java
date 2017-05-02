@@ -1,14 +1,17 @@
 package nodes;
 
 /***
- * TODO.
- *
+ * Class that contains all the molecules needed for a gradient simulation.
+ * Molecule present:
+ * enabled: bool
+ * source: bool
+ * data: double
  */
 public class GradientMoleculesMap implements IMoleculesMap {
 
-    private boolean enabled = false;
-    private boolean source = false;
-    private double data = 0.0f;
+    private boolean enabled;
+    private boolean source;
+    private double data;
 
     @Override
     public Object getMoleculeConcentration(final String mol) {

@@ -3,8 +3,10 @@ package server;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
 
@@ -32,8 +34,13 @@ import nodes.GradientNode;
 import nodes.IMoleculesMap;
 
 /***
- * TODO.
- * try to implement the server with gretty or another one
+ * Server Built with  NanoHTTPD Library to handle a REST communication between alchemist and unity. 
+ * 
+ * When it receives a POST request of a Json it will try to convert it in a NodesDescriptor through Gson Utility 
+ * and then set all the alchemist node present in the environment according with those of the NodeDescriptor.
+ * 
+ * When it receives a GET request it will collect all the alchemist nodes present on the environment into a NodesDescriptor 
+ * and then using the Gson Utility it will covert the NodeDescriptor in a Json string and send it to the requester
  */
 public class NanoServer extends NanoHTTPD {
 
@@ -56,8 +63,8 @@ public class NanoServer extends NanoHTTPD {
     }
 
     /***
-     * 
-     * @throws IOException TODO
+     * Server Constructor: simply set the port number for the socket to 8080 and start the server.
+     * @throws IOException if the standard setup of the server hasn't gone well
      */
     public NanoServer() throws IOException {
         super(PORT_NUM);
@@ -66,8 +73,8 @@ public class NanoServer extends NanoHTTPD {
     }
 
     /***
-     * 
-     * @param args TODO
+     * Create an instance of this class and start it.
+     * @param args none is needed
      */
     public static void main(final String[] args) {
         try {
@@ -75,6 +82,22 @@ public class NanoServer extends NanoHTTPD {
         } catch (IOException ioe) {
             System.err.println("Couldn't start server:\n" + ioe);
         }
+    }
+
+    @Override
+    public Response serve(final IHTTPSession session) { 
+
+        switch (session.getMethod().name()) {
+
+        case "POST":
+            return doPOST(session);
+
+        case "GET":
+            return doGET();
+        default:
+            return newFixedLengthResponse("USE A RESTFUL API!");
+        }
+
     }
 
     private Response doGET() {
@@ -136,17 +159,25 @@ public class NanoServer extends NanoHTTPD {
     }
 
     private void step(final JsonObject jsonObj) {
-        Type listType = new TypeToken<NodesDescriptor<GradientNode>>() { }.getType();
-        final NodesDescriptor<GradientNode> nodes = GSON_OBJ.fromJson(jsonObj, listType);
-        sim.schedule(() -> {
-            for (final GradientNode gNode : nodes.getNodesList()) {
-                final Node<Object> node = env.getNodeByID(gNode.getID());
-                IMoleculesMap molecules = gNode.getMolecules();
-                node.setConcentration(new SimpleMolecule("source"), (boolean) molecules.getMoleculeConcentration("source"));
-                node.setConcentration(new SimpleMolecule("enabled"), (boolean) molecules.getMoleculeConcentration("enabled"));
-                env.moveNodeToPosition(node, env.makePosition(gNode.getPosition().getPosx(), gNode.getPosition().getPosz()));
-            }
-        });
+        switch (progType) {
+        case GRADIENT:
+            Type listType = new TypeToken<NodesDescriptor<GradientNode>>() { }.getType();
+            final NodesDescriptor<GradientNode> nodes = GSON_OBJ.fromJson(jsonObj, listType);
+            sim.schedule(() -> {
+                for (final GradientNode gNode : nodes.getNodesList()) {
+                    final Node<Object> node = env.getNodeByID(gNode.getID());
+                    IMoleculesMap molecules = gNode.getMolecules();
+                    node.setConcentration(new SimpleMolecule("source"), (boolean) molecules.getMoleculeConcentration("source"));
+                    node.setConcentration(new SimpleMolecule("enabled"), (boolean) molecules.getMoleculeConcentration("enabled"));
+                    env.moveNodeToPosition(node, env.makePosition(gNode.getPosition().getPosx(), gNode.getPosition().getPosz()));
+                }
+            });
+            break;
+
+        default:
+            System.err.println("Don't know the program you asked for! : " + progType);
+            break;
+        }
     }
 
     @SuppressWarnings("unused")
@@ -207,10 +238,16 @@ public class NanoServer extends NanoHTTPD {
         sim.schedule(() -> {
             final int nNodes = comm.getNumNodes();
             env.moveNodeToPosition(node0, env.makePosition(0, 0));
-            for (int i = 1; i < env.getNodesNumber(); i++) {
-                final int id = i;
-                env.removeNode(env.getNodeByID(id));
+
+            Collection<Node<Object>> alchemistNodes = env.getNodes();
+            Iterator<Node<Object>> it = alchemistNodes.iterator();
+            while (it.hasNext()) {
+                Node<Object> node = (Node<Object>) it.next();
+                if (node.getId() != 0) {
+                    env.removeNode(node);
+                }
             }
+
             for (int i = 0; i < nNodes - 1; i++) {
                 env.addNode(node0.cloneNode(), env.makePosition(0, 0));
             }
@@ -267,26 +304,11 @@ public class NanoServer extends NanoHTTPD {
             break;
 
         default:
-            loader = null;
+            System.err.println("Don't know the program you asked for! : " + progType);
             break;
         }
 
         new Thread(sim).start();
     }
 
-    @Override
-    public Response serve(final IHTTPSession session) { 
-
-        switch (session.getMethod().name()) {
-
-        case "POST":
-            return doPOST(session);
-
-        case "GET":
-            return doGET();
-        default:
-            return newFixedLengthResponse("USE A RESTFUL API!");
-        }
-
-    }
 }

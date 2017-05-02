@@ -2,7 +2,7 @@ package nodes;
 
 import java.io.Serializable;
 /***
- * TODO.
+ * Class that represent the 2D position information of a node: x,z .
  */
 @SuppressWarnings("serial")
 public class NodePosition2D implements Serializable {
@@ -10,8 +10,9 @@ public class NodePosition2D implements Serializable {
     private double posx, posz;
 
     /***
-     * @param posx TODO
-     * @param posz TODO
+     * Class constructor that let you create a position for a node.
+     * @param posx the x position of the node
+     * @param posz the z position of the node
      */
     public NodePosition2D(final double posx, final double posz) {
         this.posx = posx;
@@ -19,27 +20,31 @@ public class NodePosition2D implements Serializable {
     }
 
     /***
-     * @return TODO
+     * Return the x position of the node.
+     * @return the x position of the node
      */
     public double getPosx() {
         return posx;
     }
 
     /***
-     * @param posx TODO
+     * Set the x position of the node.
+     * @param posx the x position of the node
      */
     public void setPosx(final double posx) {
         this.posx = posx;
     }
     /***
-     * @return TODO
+     * Return the x position of the node.
+     * @return the z position of the node
      */
     public double getPosz() {
         return posz;
     }
 
     /***
-     * @param posz TODO
+     * Set the x position of the node.
+     * @param posz the z position of the node
      */
     public void setPosz(final double posz) {
         this.posz = posz;

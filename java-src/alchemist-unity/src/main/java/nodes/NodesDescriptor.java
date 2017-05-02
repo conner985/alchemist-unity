@@ -4,29 +4,32 @@ import java.util.ArrayList;
 import java.util.List;
 
 /***
- * TODO.
- * @param <T>
+ * Class that contains a list of all nodes.
+ * Used primarily to deserialize and serialize automatically using Json utilities
+ * @param <T> the type of the nodes
  */
 public class NodesDescriptor<T extends GradientNode> {
 
     private final List<T> nodes = new ArrayList<>();
 
     /***
-     * @param node TODO
+     * Let you add a node to the list.
+     * @param node the node you want to add
      */
     public void addNode(final T node) {
         nodes.add(node);
     }
 
     /***
-     * @return TODO
+     * Return a list containing all the nodes.
+     * @return the node list
      */
     public List<T> getNodesList() {
         return nodes;
     }
 
     /***
-     * TODO.
+     * Let you remove all the nodes from the list.
      */
     public void clear() {
         nodes.clear();
