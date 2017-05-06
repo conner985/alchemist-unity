@@ -1,7 +1,12 @@
 using System;
 using UnityEngine;
 
-
+/// <summary>
+/// 
+/// Class representing an implementation of a Unity version of an Alchemist node, in particular of a node performing a gradient
+/// program.
+/// 
+/// </summary>
 [Serializable]
 public class GradientNode : ISimNode{
 
@@ -21,7 +26,7 @@ public class GradientNode : ISimNode{
         this.panel = panel;
         this.molecules = new GradientMoleculesMap();
     }
-
+    
     public int GetID()
     {
         return id;

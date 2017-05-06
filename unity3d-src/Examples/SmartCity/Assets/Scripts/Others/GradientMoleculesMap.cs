@@ -1,6 +1,11 @@
 using System;
 using UnityEngine;
 
+/// <summary>
+/// 
+/// An class representing the structure of a GradientNode molecule set
+/// 
+/// </summary>
 [Serializable]
 public class GradientMoleculesMap
 {
@@ -11,6 +16,13 @@ public class GradientMoleculesMap
     [SerializeField]
     private double data = 0.0f;
 
+    /// <summary>
+    /// 
+    /// Method that allowes to get the concentration of a particular molecule (if present)
+    /// 
+    /// </summary>
+    /// <param name="mol">The molecule name</param>
+    /// <returns>The concentration requested</returns>
     public object GetMoleculeConcentration(string mol)
     {
         switch (mol)
@@ -22,10 +34,17 @@ public class GradientMoleculesMap
             case "data":
                 return data;
             default:
-                return null;
+                return default(object);
         }
     }
 
+    /// <summary>
+    /// 
+    /// Method to set a new concentration to a molecule (if present)
+    /// 
+    /// </summary>
+    /// <param name="mol">The molecule to modify</param>
+    /// <param name="conc">The concentration of be set</param>
     public void SetMolecule(string mol, object conc)
     {
         switch(mol)
@@ -63,6 +82,12 @@ public class GradientMoleculesMap
         }
     }
 
+    /// <summary>
+    /// 
+    /// Method used to change all molecules concentration with new ones (used for updating purpose)
+    /// 
+    /// </summary>
+    /// <param name="newMolecules">The new GradientMoleculesMap to be set</param>
     public void SetMolecules(GradientMoleculesMap newMolecules)
     {
         enabled = (bool)newMolecules.GetMoleculeConcentration("enabled");

@@ -3,6 +3,13 @@ using System;
 using System.Linq;
 using System.Collections.Generic;
 
+/// <summary>
+/// 
+/// Class representing an implementation of a node that lives within Unity and it will contain all necessary information for a Unity
+/// node, including a GradientNode, which is a Unity representation of an Alchemist node and it will be sent to Alchemist.
+/// 
+/// 
+/// </summary>
 public class SmartPanel : AbstractBehaviourNode, ISmartPanel
 {
     [SerializeField]
@@ -27,6 +34,9 @@ public class SmartPanel : AbstractBehaviourNode, ISmartPanel
         nbrHood = new List<AbstractBehaviourNode>();
     }
 
+    /// <summary>
+    /// It will recalculate all AbstractBehaviourNode within a certain range
+    /// </summary>
     void Start()
     {
         RecalculateNbrHood();
@@ -43,6 +53,12 @@ public class SmartPanel : AbstractBehaviourNode, ISmartPanel
         }
     }
     
+    /// <summary>
+    /// 
+    /// It will periodically recalculate the gradient value (and render the arrow) using gradient molecules and concentrations from 
+    /// the neighbourhood which are updated by Alchemist
+    /// 
+    /// </summary>
 	void Update ()
     {
 
