@@ -1,30 +1,53 @@
 package nodes;
 
 import java.io.Serializable;
-
+/***
+ * Class that represent the 2D position information of a node: x,z .
+ */
+@SuppressWarnings("serial")
 public class NodePosition2D implements Serializable {
 
-	private float posx,posy;
-	
-	public float getPosx() {
-		return posx;
-	}
+    private double posx, posz;
 
-	public void setPosx(float posx) {
-		this.posx = posx;
-	}
+    /***
+     * Class constructor that let you create a position for a node.
+     * @param posx the x position of the node
+     * @param posz the z position of the node
+     */
+    public NodePosition2D(final double posx, final double posz) {
+        this.posx = posx;
+        this.posz = posz;
+    }
 
-	public float getPosy() {
-		return posy;
-	}
+    /***
+     * Return the x position of the node.
+     * @return the x position of the node
+     */
+    public double getPosx() {
+        return posx;
+    }
 
-	public void setPosy(float posy) {
-		this.posy = posy;
-	}
+    /***
+     * Set the x position of the node.
+     * @param posx the x position of the node
+     */
+    public void setPosx(final double posx) {
+        this.posx = posx;
+    }
+    /***
+     * Return the x position of the node.
+     * @return the z position of the node
+     */
+    public double getPosz() {
+        return posz;
+    }
 
-	public NodePosition2D(float posx, float posy) {
-		this.posx = posx;
-		this.posy = posy;
-	}
-	
+    /***
+     * Set the x position of the node.
+     * @param posz the z position of the node
+     */
+    public void setPosz(final double posz) {
+        this.posz = posz;
+    }
+
 }
