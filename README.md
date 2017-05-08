@@ -44,9 +44,13 @@ Java side, some prelimiary steps are required in order to properly start the sim
 
 * Download the Alchemist project and follow the instructions to import the project on your IDE (e.g. Eclipse) correctly.
 
-* Download the alchemist-unity project and import the `java-src/alchemist-unity` project in your IDE  together with the Alchemist folders
+* Download the alchemist-unity project and copy the `alchemist-unity` folder, present inside the java-src folder, into the one chosen to contain the Alchemist repository, more specifically into the \Alchemist\alchemist folder.
 
-* Modify the `build.gradle` file within the `java-src/alchemist-unity` project in order to add all dependencies and runtime required; moreover, modify the `settings.gradle` file to include the alchemist-unity project.
+* Modify the `build.gradle` file within the `alchemist-unity` project in order to add all dependencies you need from Alchemist and the  runtime section for all the external library required
+
+* IMPORTANT: add this line into the \Alchemist\alchemist\setting.gradle at the end of the include: 'alchemist-unity'
+
+* import the `alchemist-unity` project in your IDE  together with the Alchemist folders
 
 Now the server is ready to work and it is able to start a new Alchemist simulation as follows:
 
