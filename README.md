@@ -3,8 +3,8 @@
 ### What is this Project:
 an integration of the Unity3D game engine with Alchemist simulator
 
-* Alchemist: https://github.com/AlchemistSimulator/Alchemist
-* Unity3D: https://unity3d.com/
+* Alchemist: [LINK](https://github.com/AlchemistSimulator/Alchemist)
+* Unity3D: [LINK](https://unity3d.com/)
 
 We aim to use the Protelis engine, written in Java, to calculate computational fields and take the results to Unity, through C# scripts, to be able to animate a full simulation exploiting at full all the built-in features that Unity offers like collision avoidance, physics, animations, etc...
 
@@ -48,7 +48,7 @@ Java side, some prelimiary steps are required in order to properly start the sim
 
 * Modify the `build.gradle` file within the `alchemist-unity` project in order to add all dependencies you need from Alchemist and the  runtime section for all the external library required
 
-* IMPORTANT: add this line into the \Alchemist\alchemist\setting.gradle at the end of the include: 'alchemist-unity'
+* **IMPORTANT**: add this line into the \Alchemist\alchemist\setting.gradle at the end of the include: 'alchemist-unity'
 
 * import the `alchemist-unity` project in your IDE  together with the Alchemist folders
 
@@ -63,7 +63,7 @@ Now the server is ready to work, following a description of the setup of a new A
    sim.addOutputMonitor(new OutputMonitor<Object>() { ... });
    new Thread(sim).start();
    ```
-   So, the necessary steps are: loading a YAML configuration file, create a new `Environment\<Object\>` from that YAML, create a  new `Simulation` as new Engine and start the simulation on a different thread, then we would be able to control the simulation via commands like `sim.play()`, `sim.stop()`, and so on; moreover, to communicate with the simulation environment we could use an `OutputMonitor` to be attached to the simulation object before starting the Thread: it provides 3 method that could be exploited to know when the Simulation starts (`initialized` method called), ends (`finished` method called) or completes a step (`stepDone` method called) and inside the last one we build the NodesDescriptor collecting all nodes and all molecules/concentrations and ready to be sent to Unity.
+   So, the necessary steps are: loading a YAML configuration file, create a new `Environment<Object>` from that YAML, create a  new `Simulation` as new Engine and start the simulation on a different thread, then we would be able to control the simulation via commands like `sim.play()`, `sim.stop()`, and so on; moreover, to communicate with the simulation environment we could use an `OutputMonitor` to be attached to the simulation object before starting the Thread: it provides 3 method that could be exploited to know when the Simulation starts (`initialized` method called), ends (`finished` method called) or completes a step (`stepDone` method called) and inside the last one we build the NodesDescriptor collecting all nodes and all molecules/concentrations and ready to be sent to Unity.
 
 IMPORTANT: `sim.play();` must be called after the `init` phase in order to start the simulation. 
 
@@ -82,10 +82,10 @@ IMPORTANT: `sim.play();` must be called after the `init` phase in order to start
 
 GET and POST requests are made in order to begin and carry on the communication, it follows the explanation of steps required to the Alchemist configuration:
 
-* a POST request is made to the server with a specific json object called `init`, this object carries the number of nodes Unity needs to create into Alchemist, so the server will start a new Alchemist simulation (the number of nodes is written in the YAML file)
+* a **POST** request is made to the server with a specific json object called `init`, this object carries the number of nodes Unity needs to create into Alchemist, so the server will start a new Alchemist simulation (the number of nodes is written in the YAML file)
 
 
-* a GET request is made by Unity to the server in order to retrieve all the IDs of every node in the scene (it is a normal GET, it will provide a json object with all nodes with every information in them)
+* a **GET** request is made by Unity to the server in order to retrieve all the IDs of every node in the scene (it is a normal GET, it will provide a json object with all nodes with every information in them)
 
 
 * Unity periodically sends via POST the new positions of nodes, then it retrieves via GET all updated informations (like gradient) of all nodes previously computated by Alchemist.
