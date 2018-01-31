@@ -1,4 +1,5 @@
-## Alchemist-Unity Integration
+# Alchemist-Unity Integration
+### Developed by conner985 and Cerbo92
 
 ### What is this Project:
 an integration of the Unity3D game engine with Alchemist simulator
